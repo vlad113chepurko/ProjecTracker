@@ -2,19 +2,28 @@
 @use "@/styles/mixins" as *;
 
 .app-container {
-  width: 1440px;
-  height: auto;
-  padding-bottom: 50px;
-  background-color: $surfaces;
+  width: 100%;
+  max-width: 1440px;
+  min-width: 1000px;
+  margin: 40px auto;
+  background: rgba($surfaces, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
 
-  margin: 0 auto;
+  padding-bottom: 20px;
 
   @include flex(column, none, center);
+  gap: 24px;
 
-  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15),
+    0 0 10px rgba(255, 255, 255, 0.05) inset;
 
-  box-shadow: 10px 10px 15px 0 rgba(0, 0, 0, 0.3),
-    -10px 10px 15px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25),
+      0 0 12px rgba(255, 255, 255, 0.07) inset;
+  }
 }
 
 .app-filter-sort {

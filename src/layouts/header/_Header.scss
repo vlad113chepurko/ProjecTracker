@@ -16,7 +16,6 @@
     font-weight: 500;
     font-size: 1.3rem;
     color: $surfaces;
-    align-self: flex-start;
   }
 }
 
@@ -63,15 +62,26 @@
   transition: background-color 120ms ease, color 120ms ease,
     box-shadow 120ms ease;
   align-self: center;
-
-  background-color: rgba(0, 0, 0, 0.4);
-
+  font-weight: 600;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba($surfaces, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.logo {
+  @include flex(row, center, center);
+  gap: 10px;
+  margin-right: 20px;
+
+  img {
+    width: 40px;
+    height: 40px;
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $surfaces;
   }
 }

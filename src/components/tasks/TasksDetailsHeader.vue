@@ -28,7 +28,7 @@ const project = projectStore.getProjectById(projectId);
 <template>
   <div class="app-content">
     <article>
-      <h1>Project: {{ project.ProjectName }}</h1>
+      <h1 style="margin-bottom: 5px">Project: {{ project.ProjectName }}</h1>
       <p>Project Description: {{ project.ProjectDescription }}</p>
     </article>
     <button

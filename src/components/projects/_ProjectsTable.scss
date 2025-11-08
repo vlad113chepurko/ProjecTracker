@@ -11,7 +11,7 @@
 }
 
 .table__header {
-  background-color: #f3f3f3;
+  background-color: #ffffff;
   font-weight: bold;
 }
 
@@ -24,7 +24,7 @@
   display: flex;
   cursor: grab;
   transition: background 0.2s;
-  border-bottom: 1px solid $muted-input;
+  border-bottom: 0.5px solid $muted-input;
 }
 
 .table__row:last-child {
@@ -40,7 +40,7 @@
 }
 
 .table__row--header {
-  background-color: #ddd;
+  background-color: #d9d9d9;
 }
 
 .table__cell {
@@ -49,5 +49,5 @@
   text-align: left;
   word-break: break-word;
 
-  border: 1px solid $muted-input;
+  border-right: 0.5px solid $muted-input;
 }
