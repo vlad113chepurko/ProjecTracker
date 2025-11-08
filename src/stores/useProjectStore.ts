@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Project } from "@/interfaces/index";
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 
 export const useProjectStore = defineStore("project", () => {
   const projects = ref<Project[]>(
@@ -9,93 +9,99 @@ export const useProjectStore = defineStore("project", () => {
       : []
   );
 
-  watch(projects, (newVal) => {
-    localStorage.setItem("projects", JSON.stringify(newVal));
-  });
+  const filteredProjects = ref<Project[]>([...projects.value]);
 
   const selectedStatus = ref("All");
   const projectName = ref("");
+  const sortType = ref<
+    | "Default"
+    | "nameAsc"
+    | "nameDesc"
+    | "idAsc"
+    | "idDesc"
+    | "countAsc"
+    | "countDesc"
+    | "statusActive"
+    | "statusCompleted"
+  >("Default");
 
-  const filteredProjects = computed(() => {
-    let filtered = projects.value;
+  watch(
+    projects,
+    (newVal) => {
+      localStorage.setItem("projects", JSON.stringify(newVal));
+      updateFiltered();
+    },
+    { deep: true }
+  );
+
+  function updateFiltered() {
+    let temp = [...projects.value];
+
     if (selectedStatus.value !== "All") {
-      filtered = filtered.filter(
+      temp = temp.filter(
         (p) => p.Status?.toLowerCase() === selectedStatus.value.toLowerCase()
       );
     }
     if (projectName.value) {
-      filtered = filtered.filter((p) =>
+      temp = temp.filter((p) =>
         p.ProjectName?.toLowerCase().includes(projectName.value.toLowerCase())
       );
     }
-    return filtered;
-  });
 
-  // Sorting
-
-  // Sorting by Name
-  function sortingByName(sortByName: string) {
-    if (sortByName === "nameAsc") {
-      projects.value.sort(
-        (a, b) => a.ProjectName?.localeCompare(b.ProjectName || "") || 0
-      );
-    } else if (sortByName === "nameDesc") {
-      projects.value.sort(
-        (a, b) => b.ProjectName?.localeCompare(a.ProjectName || "") || 0
-      );
+    switch (sortType.value) {
+      case "nameAsc":
+        temp.sort((a, b) =>
+          (a.ProjectName || "").localeCompare(b.ProjectName || "")
+        );
+        break;
+      case "nameDesc":
+        temp.sort((a, b) =>
+          (b.ProjectName || "").localeCompare(a.ProjectName || "")
+        );
+        break;
+      case "idAsc":
+        temp.sort((a, b) => a.ID - b.ID);
+        break;
+      case "idDesc":
+        temp.sort((a, b) => b.ID - a.ID);
+        break;
+      case "countAsc":
+        temp.sort((a, b) => (a.TaskCounter || 0) - (b.TaskCounter || 0));
+        break;
+      case "countDesc":
+        temp.sort((a, b) => (b.TaskCounter || 0) - (a.TaskCounter || 0));
+        break;
+      case "statusActive":
+        temp.sort((a, _) => (a.Status === "Active" ? -1 : 1));
+        break;
+      case "statusCompleted":
+        temp.sort((a, _) => (a.Status === "Completed" ? -1 : 1));
+        break;
     }
-    localStorage.setItem("projects", JSON.stringify(projects.value));
+
+    filteredProjects.value = temp;
   }
 
-  // Sorting by Count
-  function sortingByCount(sortByCount: string) {
-    if (sortByCount === "countAsc") {
-      projects.value.sort(
-        (a, b) => (a.TaskCounter || 0) - (b.TaskCounter || 0)
-      );
-    } else if (sortByCount === "countDesc") {
-      projects.value.sort(
-        (a, b) => (b.TaskCounter || 0) - (a.TaskCounter || 0)
-      );
-    }
-    localStorage.setItem("projects", JSON.stringify(projects.value));
-  }
-
-  // Sorting by ID
-  function sortingById(sortById: string) {
-    if (sortById === "idAsc") {
-      projects.value.sort((a, b) => a.ID - b.ID);
-    } else if (sortById === "idDesc") {
-      projects.value.sort((a, b) => b.ID - a.ID);
-    }
-    localStorage.setItem("projects", JSON.stringify(projects.value));
-  }
-
-  // Sorting by Status
-  function sortingByStatus(sortByStatus: string) {
-    if (sortByStatus === "statusAsc") {
-      projects.value.sort(
-        (a, b) => a.Status?.localeCompare(b.Status || "") || 0
-      );
-    } else if (sortByStatus === "statusDesc") {
-      projects.value.sort(
-        (a, b) => b.Status?.localeCompare(a.Status || "") || 0
-      );
-    }
-    localStorage.setItem("projects", JSON.stringify(projects.value));
-  }
+  watch([selectedStatus, projectName, sortType], updateFiltered);
 
   function addProject(newProject: Project) {
     projects.value.push(newProject);
-    localStorage.setItem("projects", JSON.stringify(projects.value));
   }
 
-  function getProjectById(id: number): Project | undefined {
-    return projects.value.find((project) => project.ID === id);
+  function getProjectById(id: number) {
+    return projects.value.find((p) => p.ID === id);
   }
 
   function setStatusFilter(status: string) {
     selectedStatus.value = status;
+  }
+
+  function setNameFilter(name: string) {
+    projectName.value = name;
+  }
+
+  function setSort(type: typeof sortType.value) {
+    sortType.value = type;
   }
 
   return {
@@ -103,12 +109,12 @@ export const useProjectStore = defineStore("project", () => {
     filteredProjects,
     selectedStatus,
     projectName,
+    sortType,
     addProject,
     getProjectById,
     setStatusFilter,
-    sortingById,
-    sortingByStatus,
-    sortingByName,
-    sortingByCount,
+    setNameFilter,
+    setSort,
+    updateFiltered,
   };
 });

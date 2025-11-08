@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "./_ProjectDetails.scss";
 import { ref } from "vue";
-import Table from "./Table.vue";
+import TasksTable from "./TasksTable.vue";
 import { useProjectStore } from "@/stores/useProjectStore";
 import { useRoute } from "vue-router";
 import TasksTableSort from "../sort/TasksTableSort/TasksTableSort.vue";
@@ -30,7 +30,7 @@ const toggleForm = () => {
       <TasksFilter />
       <TasksTableSort />
     </div>
-    <Table :projectId="projectId" />
+    <TasksTable  />
   </div>
 
   <div v-else>

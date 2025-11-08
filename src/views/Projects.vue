@@ -18,7 +18,6 @@ const toggleForm = () => {
     <components.ProjectFilter />
     <components.ProjectSort />
   </div>
-  <components.Table />
+  <components.ProjectsTable />
   <components.AddProjects v-if="isForm" @close="toggleForm" />
 </template>
-  

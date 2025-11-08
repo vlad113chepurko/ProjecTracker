@@ -8,6 +8,7 @@ export const useTasksStore = defineStore("tasks", () => {
   const selectedStatus = ref<string>("All");
   const currentProjectId = ref<number | null>(null);
   const selectedDeadline = ref<string>("");
+  const sortBy = ref<string>("All");
   const sortOrder = ref<"asc" | "desc">("asc");
 
   const storedTasks = localStorage.getItem("tasks");
@@ -52,9 +53,18 @@ export const useTasksStore = defineStore("tasks", () => {
     }
 
     filtered = filtered.slice().sort((a, b) => {
-      const dateA = new Date(a.TaskDeadline).getTime();
-      const dateB = new Date(b.TaskDeadline).getTime();
-      return sortOrder.value === "asc" ? dateA - dateB : dateB - dateA;
+      if (sortBy.value === "deadline") {
+        const dateA = new Date(a.TaskDeadline).getTime();
+        const dateB = new Date(b.TaskDeadline).getTime();
+        return sortOrder.value === "asc" ? dateA - dateB : dateB - dateA;
+      } else if (sortBy.value === "status") {
+        const statusA = a.TaskStatus.toLowerCase();
+        const statusB = b.TaskStatus.toLowerCase();
+        if (statusA < statusB) return sortOrder.value === "asc" ? -1 : 1;
+        if (statusA > statusB) return sortOrder.value === "asc" ? 1 : -1;
+        return 0;
+      }
+      return 0;
     });
 
     return filtered;

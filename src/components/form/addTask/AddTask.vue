@@ -11,7 +11,6 @@ const route = useRoute();
 const projectIdFromRoute = Number(route.params.id) || 0;
 const taskStore = useTasksStore();
 const tasks = taskStore.tasks;
-
 const modalStore = useModalStore();
 
 const projectStore = useProjectStore();
@@ -31,21 +30,34 @@ const onSubmit = () => {
 
   taskStore.addTask(taskToAdd);
 
-  modalStore.createModal(`Task ${newTask.value.TaskName} was created!`);
+  modalStore.createModal(`Task ${taskToAdd.TaskName} was created!`);
 
-  const project = projects.find((p) => p.ID === taskToAdd.ProjectID);
-  if (project) {
-    if (!project.Tasks) project.Tasks = [];
-    project.Tasks.push(taskToAdd);
-    project.TaskCounter = project.Tasks.length;
+  const projectIndex = projects.findIndex((p) => p.ID === taskToAdd.ProjectID);
+  if (projectIndex !== -1) {
+    const project = projects[projectIndex];
+
+    const updatedTasks = project!.Tasks
+      ? [...project!.Tasks, taskToAdd]
+      : [taskToAdd];
+
+    projects[projectIndex] = {
+      ID: project!.ID,
+      ProjectName: project!.ProjectName,
+      ProjectDescription: project!.ProjectDescription,
+      Status: project!.Status,
+      CreateAt: project!.CreateAt,
+      Tasks: updatedTasks,
+      TaskCounter: updatedTasks.length,
+    };
   }
+
   newTask.value = {
     ID: tasks.length > 0 ? Math.max(...tasks.map((t) => t.ID)) + 1 : 1,
     TaskName: "",
     TaskAuthor: "",
     TaskStatus: "todo",
-    TaskDeadline: new Date().toString().split("T")[0],
-    ProjectID: 0,
+    TaskDeadline: new Date().toISOString().split("T")[0],
+    ProjectID: projectIdFromRoute,
   };
 };
 </script>

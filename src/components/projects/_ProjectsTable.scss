@@ -1,0 +1,53 @@
+@use "@/styles/variables.scss" as *;
+
+.table__container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  width: 98%;
+}
+
+.table__header {
+  background-color: #f3f3f3;
+  font-weight: bold;
+}
+
+.table__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table__row {
+  display: flex;
+  cursor: grab;
+  transition: background 0.2s;
+  border-bottom: 1px solid $muted-input;
+}
+
+.table__row:last-child {
+  border-bottom: none;
+}
+
+.table__row:hover {
+  background-color: #fafafa;
+}
+
+.table__row:active {
+  cursor: grabbing;
+}
+
+.table__row--header {
+  background-color: #ddd;
+}
+
+.table__cell {
+  flex: 1;
+  padding: 12px 8px;
+  text-align: left;
+  word-break: break-word;
+
+  border: 1px solid $muted-input;
+}
