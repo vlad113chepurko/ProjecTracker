@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "@/components/filters/ProjectTableFilters/_ProjectFilter.scss";
+import "../project-table-filter/_ProjectFilter.scss";
 import { tasksFilters } from "./components/index";
 </script>
 <template>

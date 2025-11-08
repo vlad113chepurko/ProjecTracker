@@ -2,10 +2,11 @@
 import "../addProject/_AddProjects.scss";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import type { Task } from "@/interfaces/index";
+import type { Task } from "@/types/task.type";
 import { useProjectStore } from "@/stores/useProjectStore";
 import { useTasksStore } from "@/stores/useTasksStore";
 import { TaskService } from "@/services/tasks.service";
+import { Field } from "vee-validate";
 
 const route = useRoute();
 const projectIdFromRoute = Number(route.params.id);
@@ -32,28 +33,41 @@ const newTask = ref<Task>({
       <span>X</span>
     </button>
     <label for="taskName">Task Name</label>
-    <input
+    <Field
+      as="input"
       v-model="newTask.TaskName"
-      type="text"
       name="taskName"
       id="taskName"
       placeholder="Enter task name"
-      required
+      rules="required"
     />
     <label for="taskAuthor">Author</label>
-    <select name="taskAuthor" id="taskAuthor" v-model="newTask.TaskAuthor">
+    <Field
+      as="select"
+      name="taskAuthor"
+      id="taskAuthor"
+      v-model="newTask.TaskAuthor"
+      rules="required"
+    >
       <option value="Alice">Alice</option>
       <option value="Bob">Bob</option>
       <option value="Charlie">Charlie</option>
-    </select>
+    </Field>
     <label for="taskName">Task Status</label>
-    <select name="status" id="taskStatus" v-model="newTask.TaskStatus">
+    <Field
+      as="select"
+      name="status"
+      id="taskStatus"
+      v-model="newTask.TaskStatus"
+      rules="required"
+    >
       <option value="Todo">To Do</option>
       <option value="In Progress">In Progress</option>
       <option value="Done">Done</option>
-    </select>
+    </Field>
     <label for="taskDeadline">Deadline</label>
-    <input
+    <Field
+      as="input"
       type="date"
       name="taskDeadline"
       id="taskDeadline"

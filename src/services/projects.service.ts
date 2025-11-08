@@ -1,4 +1,4 @@
-import type { Project } from "@/interfaces/index";
+import type { Project } from "@/types/project.type";
 import { useModalStore } from "@/stores/useModalStore";
 class ProjectsService {
   static addProject(newProject: Project, projectStore: any) {

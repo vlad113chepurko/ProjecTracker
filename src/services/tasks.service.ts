@@ -1,4 +1,4 @@
-import type { Task } from "@/interfaces";
+import type { Task } from "@/types/task.type";
 import { useTasksStore } from "@/stores/useTasksStore";
 import { useModalStore } from "@/stores/useModalStore";
 

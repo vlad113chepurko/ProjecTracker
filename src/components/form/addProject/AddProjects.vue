@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "./_AddProjects.scss";
 import { ref } from "vue";
-import type { Project } from "@/interfaces/index";
+import type { Project } from "@/types/task.type";
 import { useProjectStore } from "@/stores/useProjectStore";
 import { ProjectsService } from "@/services/projects.service";
 
@@ -20,7 +20,10 @@ const newProject = ref<Project>({
 </script>
 
 <template>
-  <form class="form" @submit.prevent="ProjectsService.addProject(newProject, projectStore)">
+  <form
+    class="form"
+    @submit.prevent="ProjectsService.addProject(newProject, projectStore)"
+  >
     <h2>Add New Project</h2>
     <button @click="$emit('close')" type="button" class="form__close">
       <span>X</span>

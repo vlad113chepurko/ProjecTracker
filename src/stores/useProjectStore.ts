@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Project } from "@/interfaces/index";
+import type { Project } from "@/types/task.type";
 import { ref, watch } from "vue";
 
 export const useProjectStore = defineStore("project", () => {
