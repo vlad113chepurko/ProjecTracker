@@ -25,7 +25,7 @@ const goToProfile = (projectId: number) => {
     </div>
 
     <draggable
-      v-model="projectStore.projects"
+      v-model="projectStore.filteredProjects"
       tag="div"
       class="table__body"
       :animation="200"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import "./_ProjectDetails.scss";
-import { ref } from "vue";
+import { useFormStore } from "@/stores/useFormStore";
 
 // Filters and Sorters
 import TasksTableSort from "../sort/tasks-table-sort/TasksTableSort.vue";
@@ -10,14 +10,11 @@ import TasksFilter from "../filters/tasks-table-filter/TasksFilter.vue";
 import { components } from "@/components/index";
 import TasksTable from "./TasksTable.vue";
 import TasksDetailsHeader from "./TasksDetailsHeader.vue";
-
-// Logic
-const isForm = ref<boolean>(false);
 </script>
 
 <template>
   <div class="project-wrapper">
-    <TasksDetailsHeader :isForm="isForm" />
+    <TasksDetailsHeader />
     <div class="app-filter-sort">
       <TasksFilter />
       <TasksTableSort />
@@ -25,10 +22,10 @@ const isForm = ref<boolean>(false);
     <TasksTable />
   </div>
   <components.AddTask
-    v-if="isForm"
+    v-if="useFormStore().isFormOpen"
     @close="
       () => {
-        isForm = false;
+        useFormStore().closeForm();
       }
     "
   />
