@@ -8,6 +8,7 @@ export const useProjectStore = defineStore("project", () => {
       ? JSON.parse(localStorage.getItem("projects")!)
       : []
   );
+  const projectToEdit = ref<Project | null>(null);
 
   const filteredProjects = ref<Project[]>([...projects.value]);
 
@@ -33,6 +34,10 @@ export const useProjectStore = defineStore("project", () => {
     },
     { deep: true }
   );
+
+  function setProjectToEdit(project: Project | null) {
+    projectToEdit.value = project;
+  }
 
   function updateFiltered() {
     let temp = [...projects.value];
@@ -117,6 +122,8 @@ export const useProjectStore = defineStore("project", () => {
 
   return {
     projects,
+    projectToEdit,
+    setProjectToEdit,
     filteredProjects,
     selectedStatus,
     projectName,

@@ -51,3 +51,47 @@
 
   border-right: 0.5px solid $muted-input;
 }
+
+.table__btn-edit,
+.table__btn-delete {
+  border: none;
+  outline: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #fff;
+}
+
+.table__btn-edit {
+  margin-right: 10px;
+  background: #3a86ff;
+  box-shadow: 0 3px 6px rgba(58, 134, 255, 0.3);
+
+  &:hover {
+    background: #266dd3;
+    box-shadow: 0 4px 10px rgba(58, 134, 255, 0.45);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.table__btn-delete {
+  background: #ef233c;
+  box-shadow: 0 3px 6px rgba(239, 35, 60, 0.3);
+
+  &:hover {
+    background: #c9182b;
+    box-shadow: 0 4px 10px rgba(239, 35, 60, 0.45);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}

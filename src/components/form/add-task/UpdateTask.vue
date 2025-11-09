@@ -1,67 +1,77 @@
 <script setup lang="ts">
 import "../add-project/_AddProjects.scss";
-import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { reactive, watch } from "vue";
 import type { Task } from "@/types/task.type";
-import { useProjectStore } from "@/stores/useProjectStore";
-import { useTasksStore } from "@/stores/useTasksStore";
-import { TaskService } from "@/services/tasks.service";
-import { Field } from "vee-validate";
 import { useFormStore } from "@/stores/useFormStore";
+import { useTasksStore } from "@/stores/useTasksStore";
+import { useProjectStore } from "@/stores/useProjectStore";
+import { Field } from "vee-validate";
+import { TaskService } from "@/services/tasks.service";
 
-const route = useRoute();
-const projectIdFromRoute = Number(route.params.id);
-const projects = useProjectStore().projects;
-const tasks = useTasksStore().tasks;
 const formStore = useFormStore();
-
-const newTask = ref<Task>({
-  ID: tasks.length > 0 ? Math.max(...tasks.map((t) => t.ID)) + 1 : 1,
+const tasksStore = useTasksStore();
+const projectsStore = useProjectStore();
+const updatedTask = reactive<Task>({
+  ID: 0,
   TaskName: "",
   TaskAuthor: "",
-  TaskStatus: "todo",
-  TaskDeadline: new Date().toString().split("T")[0],
-  ProjectID: projectIdFromRoute,
+  TaskStatus: "",
+  TaskDeadline: "",
+  ProjectID: 0,
 });
+
+watch(
+  () => tasksStore.taskToEdit,
+  (task) => {
+    if (task) Object.assign(updatedTask, task);
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <form
     class="form"
-    @submit.prevent="TaskService.addTaskToProject(newTask, projects)"
+    @submit.prevent="
+      TaskService.updateTask(updatedTask, projectsStore.projects)
+    "
   >
-    <h2>Add New Task</h2>
-    <button @click="formStore.closeForm()" type="button" class="form__close">
+    <h2>Update Task</h2>
+    <button
+      @click="formStore.closeUpdateTask()"
+      type="button"
+      class="form__close"
+    >
       <span>X</span>
     </button>
-    <label for="taskName">Task Name</label>
+    <label for="taskName">Update Task Name</label>
     <Field
       as="input"
-      v-model="newTask.TaskName"
+      v-model="updatedTask.TaskName"
       name="taskName"
       id="taskName"
       placeholder="Enter task name"
       rules="required"
       required
     />
-    <label for="taskAuthor">Author</label>
+    <label for="taskAuthor">Update Author</label>
     <Field
       as="select"
       name="taskAuthor"
       id="taskAuthor"
-      v-model="newTask.TaskAuthor"
+      v-model="updatedTask.TaskAuthor"
       rules="required"
     >
       <option value="Alice">Alice</option>
       <option value="Bob">Bob</option>
       <option value="Charlie">Charlie</option>
     </Field>
-    <label for="taskName">Task Status</label>
+    <label for="taskName">Update Task Status</label>
     <Field
       as="select"
       name="status"
       id="taskStatus"
-      v-model="newTask.TaskStatus"
+      v-model="updatedTask.TaskStatus"
       rules="required"
     >
       <option value="Todo">To Do</option>
@@ -74,9 +84,9 @@ const newTask = ref<Task>({
       type="date"
       name="taskDeadline"
       id="taskDeadline"
-      v-model="newTask.TaskDeadline"
+      v-model="updatedTask.TaskDeadline"
       required
     />
-    <button class="form__add" type="submit">Add Task</button>
+    <button class="form__add" type="submit">Update Task</button>
   </form>
 </template>

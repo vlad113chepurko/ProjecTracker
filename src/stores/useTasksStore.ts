@@ -4,6 +4,7 @@ import { ref, watch, computed } from "vue";
 
 export const useTasksStore = defineStore("tasks", () => {
   const tasks = ref<Task[]>([]);
+  const taskToEdit = ref<Task | null>(null);
   const selectedAuthor = ref<string>("All");
   const selectedStatus = ref<string>("All");
   const currentProjectId = ref<number | null>(null);
@@ -24,9 +25,25 @@ export const useTasksStore = defineStore("tasks", () => {
     { deep: true }
   );
 
+  function setTaskToEdit(task: Task | null) {
+    taskToEdit.value = task;
+  }
+
   function addTask(task: Task) {
     tasks.value.push(task);
   }
+
+  function deleteTask(taskId: number) {
+    tasks.value = tasks.value.filter((task) => task.ID !== taskId);
+  }
+
+  function updateTask(updatedTask: Task) {
+    const index = tasks.value.findIndex((task) => task.ID === updatedTask.ID);
+    if (index !== -1) {
+      tasks.value[index] = updatedTask;
+    }
+  }
+
   // Filters
   const filteredTasks = computed(() => {
     let filtered = tasks.value;
@@ -70,8 +87,12 @@ export const useTasksStore = defineStore("tasks", () => {
   });
 
   return {
+    taskToEdit,
+    setTaskToEdit,
     tasks,
     addTask,
+    deleteTask,
+    updateTask,
     currentProjectId,
     filteredTasks,
     selectedAuthor,

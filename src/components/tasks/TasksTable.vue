@@ -4,9 +4,12 @@ import { ref, watch, onMounted } from "vue";
 import { useTasksStore } from "@/stores/useTasksStore";
 import { useRoute } from "vue-router";
 import draggable from "vuedraggable";
+import { TaskService } from "@/services/tasks.service";
+import { useFormStore } from "@/stores/useFormStore";
 
 const route = useRoute();
 const tasksStore = useTasksStore();
+const formStore = useFormStore();
 
 const tasks = ref<Array<any>>([]);
 
@@ -33,6 +36,7 @@ watch(
         <div class="table__cell">Author</div>
         <div class="table__cell">Status</div>
         <div class="table__cell">Deadline</div>
+        <div class="table__cell">Configuration</div>
       </div>
     </div>
 
@@ -44,6 +48,25 @@ watch(
           <div class="table__cell">{{ task.TaskAuthor }}</div>
           <div class="table__cell">{{ task.TaskStatus }}</div>
           <div class="table__cell">{{ task.TaskDeadline }}</div>
+          <div class="table__cell">
+            <button
+              @click="
+                () => {
+                  tasksStore.setTaskToEdit(task);
+                  formStore.openUpdateTask();
+                }
+              "
+              class="table__btn-edit"
+            >
+              Edit
+            </button>
+            <button
+              @click="TaskService.deleteTaskById(task.ID)"
+              class="table__btn-delete"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </template>
     </draggable>

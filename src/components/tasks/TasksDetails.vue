@@ -21,6 +21,7 @@ import TasksDetailsHeader from "./TasksDetailsHeader.vue";
     </div>
     <TasksTable />
   </div>
+  <components.UpdateTask v-if="useFormStore().isUpdateTaskOpen" />
   <components.AddTask v-if="useFormStore().isFormOpen" />
   <components.UpdateProject v-if="useFormStore().isUpdateFormOpen" />
 </template>

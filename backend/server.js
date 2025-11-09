@@ -32,6 +32,27 @@ app.delete("/projects/delete/:id", (req, res) => {
 });
 
 // Tasks endpoints
+app.post("/tasks/create", (req, res) => {
+  const { title, description, author, status, projectId } = req.body;
+  res.status(201).json({
+    message: "Task created",
+    task: { title, description, author, status, projectId },
+  });
+});
+
+app.delete("/tasks/delete/:id", (req, res) => {
+  const { id } = req.params;
+  res.status(200).json({ message: `Task with id ${id} deleted` });
+});
+
+app.put("/tasks/update/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, description, author, status, projectId } = req.body;
+  res.status(200).json({
+    message: "Task updated",
+    task: { id, title, description, author, status, projectId },
+  });
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
