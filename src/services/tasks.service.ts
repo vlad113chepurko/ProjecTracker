@@ -8,15 +8,17 @@ class TaskService {
     const taskStore = useTasksStore();
     const modalStore = useModalStore();
 
+    const taskCopy = JSON.parse(JSON.stringify(newTask));
+
     axios
-      .post("http://localhost:3000/tasks/create", newTask)
+      .post("http://localhost:3000/tasks/create", taskCopy)
       .then((response) => console.log(response.data))
       .catch((error) =>
         console.error("There was an error creating the task!", error)
       );
 
-    taskStore.addTask(newTask);
-    modalStore.createModal(`Task ${newTask.TaskName} was created!`);
+    taskStore.addTask(taskCopy);
+    modalStore.createModal(`Task ${taskCopy.TaskName} was created!`);
   }
 
   static deleteTaskById(taskId: number) {

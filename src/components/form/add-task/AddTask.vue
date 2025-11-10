@@ -13,6 +13,31 @@ const projectIdFromRoute = Number(route.params.id);
 const tasks = useTasksStore().tasks;
 const formStore = useFormStore();
 
+const handleAddTask = () => {
+  const taskStore = useTasksStore();
+
+  const newId =
+    taskStore.tasks.length > 0
+      ? Math.max(...taskStore.tasks.map((t) => t.ID)) + 1
+      : 1;
+
+  const taskCopy = {
+    ...newTask.value,
+    ID: newId,
+  };
+
+  TaskService.addTaskToProject(taskCopy);
+
+  newTask.value = {
+    ID: 0,
+    TaskName: "",
+    TaskAuthor: "",
+    TaskStatus: "Todo",
+    TaskDeadline: new Date().toISOString().split("T")[0],
+    ProjectID: projectIdFromRoute,
+  };
+};
+
 const newTask = ref<Task>({
   ID: tasks.length > 0 ? Math.max(...tasks.map((t) => t.ID)) + 1 : 1,
   TaskName: "",
@@ -24,7 +49,7 @@ const newTask = ref<Task>({
 </script>
 
 <template>
-  <form class="form" @submit.prevent="TaskService.addTaskToProject(newTask)">
+  <form class="form" @submit.prevent="handleAddTask">
     <h2>Add New Task</h2>
     <button @click="formStore.closeForm()" type="button" class="form__close">
       <span>X</span>
